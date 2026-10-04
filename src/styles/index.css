@@ -1,0 +1,249 @@
+@import 'tailwindcss';
+
+/* ── Tokens ─────────────────────────────────────────────── */
+@theme {
+  --color-cream: #f7f7f2;
+  --color-ink: #0e0f0c;
+  --color-grey: #8a8a84;
+  --color-hair: #e3e3dc;
+  --color-studio: #10120f;
+  --color-paper: #f5f5f0;
+  --color-lime: #baf709;
+  --color-onair: #ff3b30;
+
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  --font-tamil: 'Noto Sans Tamil', 'Mukta Malar', sans-serif;
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Page colours are variables so the theme toggle and the FYP zone can swap them. */
+:root {
+  --bg: #f7f7f2;
+  --fg: #0e0f0c;
+  --muted: #6f6f69;
+  --line: #e3e3dc;
+  --card: #ffffff;
+  --accent-ink: #0e0f0c; /* text colour that sits on lime */
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --bg: #0b0c0a;
+  --fg: #f5f5f0;
+  --muted: #9a9a93;
+  --line: #24261f;
+  --card: #151712;
+  color-scheme: dark;
+}
+/* FYP zone: whole page goes studio-dark while the FYP section is on screen */
+:root.in-fyp {
+  --bg: #10120f;
+  --fg: #f5f5f0;
+  --muted: #9a9a93;
+  --line: #262922;
+  --card: #171a15;
+}
+
+html {
+  background: var(--bg);
+  overflow-x: clip;
+  -webkit-text-size-adjust: 100%;
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  transition:
+    background-color 0.8s var(--ease-expo),
+    color 0.8s var(--ease-expo);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-lime);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* ── Type helpers ───────────────────────────────────────── */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 100%;
+  font-variation-settings: 'wdth' 100;
+  letter-spacing: -0.035em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+.serif-i {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.tamil {
+  font-family: var(--font-tamil);
+}
+.outline-text {
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1.5px currentColor;
+}
+.muted {
+  color: var(--muted);
+}
+
+/* Masked line used by SplitText reveals */
+.line-mask {
+  overflow: clip;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+
+/* Hairline grid + grain */
+.hair-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 1.2s steps(6) infinite;
+}
+@keyframes grain {
+  0%, 100% { background-position: 0 0; }
+  20% { background-position: -30px 20px; }
+  40% { background-position: 20px -30px; }
+  60% { background-position: -20px -10px; }
+  80% { background-position: 30px 30px; }
+}
+
+/* Links: underline draws left→right, retracts right→left */
+.u-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  transition: background-size 0.45s var(--ease-expo);
+}
+.u-link:hover,
+.u-link:focus-visible {
+  background-size: 100% 1px;
+  background-position: 0% 100%;
+}
+
+.spin-slow {
+  animation: spin 14s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+.caret::after {
+  content: '';
+  display: inline-block;
+  width: 0.08em;
+  height: 1em;
+  margin-left: 0.05em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: blink 1s steps(1) infinite;
+}
+
+/* View transition: FYP card → case-study hero, and theme reveal */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+.vt-fyp-hero {
+  view-transition-name: fyp-hero;
+}
+
+/* No horizontal scrollbars from marquees */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.2s !important;
+  }
+  .grain { display: none; }
+}
+
+.theme-switching,
+.theme-switching * {
+  transition: none !important;
+}
+
+/* FYP: pulsing sound rings + neon ON AIR sign */
+@keyframes ring-out {
+  from { transform: translate(-50%, -50%) scale(0.35); opacity: 0.9; }
+  to { transform: translate(-50%, -50%) scale(2.6); opacity: 0; }
+}
+.sound-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 9999px;
+  border: 1px solid var(--color-lime);
+  animation: ring-out 4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+@keyframes neon {
+  0% { opacity: 0.15; }
+  6% { opacity: 1; }
+  9% { opacity: 0.2; }
+  13% { opacity: 1; }
+  24% { opacity: 0.35; }
+  27%, 100% { opacity: 1; }
+}
+.onair { opacity: 0.18; }
+.onair.is-on {
+  animation: neon 1.3s steps(1) forwards;
+  text-shadow: 0 0 12px rgba(255, 59, 48, 0.8);
+  box-shadow: 0 0 24px -4px rgba(255, 59, 48, 0.6), inset 0 0 12px -6px rgba(255, 59, 48, 0.6);
+}

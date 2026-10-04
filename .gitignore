@@ -1,0 +1,9 @@
+node_modules
+dist
+.DS_Store
+*.local
+.vercel
+
+# Source PNGs (≈70 MB). The web-ready WebP versions in /public are committed instead.
+# Keep this folder locally so you can re-run `npm run images`.
+raw
